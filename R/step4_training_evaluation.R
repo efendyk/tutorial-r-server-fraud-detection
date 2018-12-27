@@ -160,7 +160,7 @@ Predict_Score_sql <- RxSqlServerData(table = "Predict_Score", connectionString =
 rxDataStep(inData = Predict_Score1_sql, 
            outFile = Predict_Score_sql, 
            overwrite = TRUE, 
-           rowsPerRead = 200000,
+           rowsPerRead = 20000,
            transforms = list(
              transactionDateTime = as.character(as.POSIXct(paste(transactionDate, sprintf("%06d", as.numeric(transactionTime)), sep=""), format = "%Y%m%d %H%M%S", tz = "GMT")),
              transactionDate = NULL, 

@@ -121,7 +121,7 @@ clean_preprocess <- function(input_data_query, output_sql_name){
   rxDataStep(inData = Input_sql, 
              outFile = Output_sql, 
              overwrite = TRUE, 
-             rowsPerRead = 200000,
+             rowsPerRead = 20000,
              transformFunc = preprocessing,
              transformObjects = list(var_with_NA = variables_NA),
              transforms = list(

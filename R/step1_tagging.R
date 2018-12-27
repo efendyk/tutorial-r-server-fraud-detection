@@ -213,7 +213,11 @@ print("Tagging the transactions...")
 # that were in the fraud table. 
 
 Untagged_Fraud_Account_sql <- RxSqlServerData(sqlQuery = 
-                                                "SELECT t1.*, t2.startDateNTime, t2.endDateNTime
+                                                "SELECT t1.* 
+                                                    --,CAST(t2.startDateNTime AS VARCHAR) AS startDateNTime
+                                                    --,CAST(t2.endDateNTime AS VARCHAR) AS endDateNTime
+                                                    ,t2.startDateNTime
+                                                    ,t2.endDateNTime
                                                 FROM Untagged_Transactions_Account AS t1
                                                 LEFT JOIN
                                                 (SELECT accountID, min(transactionDateTime) as startDateNTime, max(transactionDateTime) as endDateNTime 
@@ -230,14 +234,17 @@ Tagged_sql <- RxSqlServerData(table = "Tagged", connectionString = connection_st
 ## if accountID is found in the fraud dataset and transactionDateTime is within the fraud time range, tag it as 1: fraud.
 ## if accountID is found in the fraud dataset but transactionDateTime is out of the fraud time range, tag it as 2: pre-fraud.
 
-rxDataStep(inData = Untagged_Fraud_Account_sql, 
-           outFile = Tagged_sql,
-           overwrite = TRUE,
-           rowsPerRead = 200000,
-           transforms = list(
-             label = ifelse(is.na(startDateNTime), 0, 
-                            ifelse(transactionDateTime >= startDateNTime & transactionDateTime <= endDateNTime, 1, 2))
-              ))
 
+
+rxDataStep(inData = Untagged_Fraud_Account_sql
+           ,outFile = Tagged_sql
+           ,overwrite = TRUE
+           ,rowsPerRead = 20000
+           ,transforms = list(
+             label = ifelse(is.na(startDateNTime), 0,
+                            ifelse(transactionDateTime >= startDateNTime & transactionDateTime <= endDateNTime, 1, 2))
+            )
+)
+           
 
 

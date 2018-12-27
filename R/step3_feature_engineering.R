@@ -119,7 +119,7 @@ assign_risk_and_flags <- function(input_sql_name, output_sql_name){
   rxDataStep(inData = Input_sql,
              outFile = Output_sql, 
              overwrite = TRUE, 
-             rowsPerRead = 200000,
+             rowsPerRead = 20000,
              transformFunc = assign_risk,
              transformObjects =  list(risk_variables = risk_vars, connection_string = connection_string),
              transforms = list(
