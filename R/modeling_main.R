@@ -29,13 +29,13 @@ Fraud_Transactions <- "../Data/Fraud_Transactions.csv"
 ## Database name. If it already exists, tables will be overwritten. If not, it will be created.
 ## Server name. If conecting remotely to the DSVM, the full DNS address should be used with the port number 1433 (which should be enabled) 
 db_name <- "FraudR"
-server <- "localhost"
-connection_string <- sprintf("Driver=SQL Server;Server=%s;Database=%s;Trusted_Connection=TRUE", server, db_name)
+server <- "192.168.1.35"
+# connection_string <- sprintf("Driver=SQL Server;Server=%s;Database=%s;Trusted_Connection=TRUE", server, db_name)
 # Above connection is set up to use your Windows credentials
 # To use an id/password instead, add them in the lines below and uncomment 
-# user_id <- "XXXYOURID"
-# password <- "XXXYOURPW"
-# connection_string <- sprintf("Driver=SQL Server;Server=%s;Database=%s;UID=%s;PWD=%s", server, db_name, user_id, password)
+user_id <- "sa"
+password <- "kotakpasir"
+connection_string <- sprintf("Driver=SQL Server;Server=%s;Database=%s;UID=%s;PWD=%s", server, db_name, user_id, password)
 
 ##############################################################################################################################
 ## Database Creation. 
@@ -43,9 +43,9 @@ connection_string <- sprintf("Driver=SQL Server;Server=%s;Database=%s;Trusted_Co
 
 # Open an Odbc connection with SQL Server master database only to create a new database with the rxExecuteSQLDDL function.
 
-connection_string_master <- sprintf("Driver=SQL Server;Server=%s;Database=master;Trusted_Connection=TRUE", server)
+# connection_string_master <- sprintf("Driver=SQL Server;Server=%s;Database=master;Trusted_Connection=TRUE", server)
 # Or with id/password:
-# connection_string_master <- sprintf("Driver=SQL Server;Server=%s;Database=master;UID=%s;PWD=%s", server, user_id, password)
+connection_string_master <- sprintf("Driver=SQL Server;Server=%s;Database=master;UID=%s;PWD=%s", server, user_id, password)
 
 outOdbcDS_master <- RxOdbcData(table = "Default_Master", connectionString = connection_string_master)
 rxOpen(outOdbcDS_master, "w")
